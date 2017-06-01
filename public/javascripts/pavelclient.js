@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     $('#calendar').fullCalendar({
         dayClick: function() {
-        alert('a a day has been clicked!');
+        alert('a day has been clicked!');
     }
     })
 
