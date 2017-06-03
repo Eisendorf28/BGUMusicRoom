@@ -4,30 +4,33 @@
 $(document).ready(function () {
 
     // page is now ready, initialize the calendar...
-    //$('#calendar').fullCalendar('next'); //what does it do?
     $('#calendar').fullCalendar({
         defaultView: 'agendaWeek',
         // duration: {days: 1} // doesn't work
-        header: { 
-            center: 'month,agendaWeek'}, // buttons for switching between views
+        header: {
+            center: 'agendaWeek',       //, more views 
+            left: 'title',              //the date title
+            right: 'walla today prev,next'    //today, prev and next 
+        },
+        // buttons for switching between views
         views: {
             agendaWeek: {
-            type: 'agenda',
-            duration: { days: 7 },
-            buttonText: 'Week'
-        }
-        // ,
-        // month: {
-        //     type: 'month',
-        //     duration: { days: 30},
-        //     buttonText: 'Month'
-        // }
-    }
-    });
-    // $('#calendar').fullCalendar({
-    //     dayClick: function() {
-    //     //alert('a day has been clicked!');
-    //     console.log('adsdadsa');}
-    // })
-    // $('#calendar'.fullCalendar.agendaWeek);
+                type: 'agenda',
+                duration: { days: 1 },
+                buttonText: 'Week',
+            }
+        },
+        dayClick: function () {
+            //alert('a day has been clicked!');
+            console.log('a day has been clicked!');
+        },
+        customButtons: {
+            walla: {    //the name of my custom buttin
+                text: 'custom!',
+                click: function () {
+                    alert('clicked the custom button!');
+                }
+            }
+        },
+    })
 });
