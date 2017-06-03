@@ -6,6 +6,7 @@ $(document).ready(function () {
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
         defaultView: 'agendaWeek',
+        slotDuration: '01:00:00',
         // duration: {days: 1} // doesn't work
         header: {
             center: 'agendaWeek',       //, more views 
@@ -16,7 +17,7 @@ $(document).ready(function () {
         views: {
             agendaWeek: {
                 type: 'agenda',
-                duration: { days: 1 },
+                //duration: { minutes: '01:00:00' },
                 buttonText: 'Week',
             }
         },
