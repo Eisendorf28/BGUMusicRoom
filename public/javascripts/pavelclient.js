@@ -7,6 +7,7 @@ $(document).ready(function () {
     $('#calendar').fullCalendar({
         defaultView: 'agendaWeek',
         slotDuration: '01:00:00',
+        allDaySlot: false,
         // duration: {days: 1} // doesn't work
         header: {
             center: 'agendaWeek',       //, more views 
