@@ -8,6 +8,8 @@ $(document).ready(function () {
         defaultView: 'agendaWeek',
         slotDuration: '01:00:00',
         allDaySlot: false,
+        slotLabelFormat: 'hh:mm',
+        slotEventOverlap: false,
         // duration: {days: 1} // doesn't work
         header: {
             center: 'agendaWeek',       //, more views 
