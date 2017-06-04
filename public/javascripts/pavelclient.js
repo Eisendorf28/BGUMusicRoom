@@ -1,6 +1,8 @@
 // var j = 3; //just a function to show that clients can also process.
 // j = j + 3;
 // window.j = j;
+
+//Should I delete entries every time or save them? If i delete them - i need to use visibleRange to restrict former weeks.
 $(document).ready(function () {
 
     // page is now ready, initialize the calendar...
@@ -29,8 +31,14 @@ $(document).ready(function () {
             //alert('a day has been clicked!');
             console.log('a day has been clicked!');
         },
+        validRange: function (nowDate) {
+            return {
+                start: nowDate,                         //not good, need to make it 1 hour from NOW
+                end: nowDate.clone().add(3, 'days')
+            };
+        },
         customButtons: {
-            walla: {    //the name of my custom buttin
+            walla: {    //the name of my custom button
                 text: 'custom!',
                 click: function () {
                     alert('clicked the custom button!');
