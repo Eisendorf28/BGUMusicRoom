@@ -10,6 +10,7 @@ $(document).ready(function () {
         allDaySlot: false,
         slotLabelFormat: 'hh:mm',
         slotEventOverlap: false,
+        nowIndicator: true,
         // duration: {days: 1} // doesn't work
         header: {
             center: 'agendaWeek',       //, more views 
