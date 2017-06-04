@@ -5,6 +5,11 @@
 // var now = moment();
 // document.write(now);
 //Should I delete entries every time or save them? If i delete them - i need to use visibleRange to restrict former weeks.
+var businessHours = {// days of week. an array of zero-based day of week integers (0=Sunday)
+    dow: [1, 2, 3, 4], // Monday - Thursday
+    start: '10:00', // a start time (10am in this example)
+    end: '12:00' // an end time (6pm in this example)
+};
 $(document).ready(function () {
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
@@ -12,13 +17,21 @@ $(document).ready(function () {
         slotDuration: '01:00:00',
         allDaySlot: false,
         slotLabelFormat: 'HH:mm',
-        slotEventOverlap: false,                //what if drums/piano are taken away?   
+        slotEventOverlap: false,               //what if drums/piano are taken away?   
         nowIndicator: true,
-        displayEventTime: true,                 //on events
-        displayEventEnd: true,                 //same 
-        //dayPopoverFormat,                     //change later
+        displayEventTime: true,                //on events
+        displayEventEnd: true,                 //same
+        //dayPopoverFormat,                    //change later
         selectable: true,
         selectHelper: true,
+        selectOverlap: false,
+        selectConstraint: {
+            start: '10:00',                     //no duration function
+            end: '12:00'
+        },
+        // eventConstraint: {                  //no duration function yet
+        //     businessHours
+        // },
         header: {
             center: 'agendaWeek',               //, more views 
             left: 'title',                      //the date title
