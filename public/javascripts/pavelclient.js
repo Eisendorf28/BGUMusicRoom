@@ -1,8 +1,8 @@
 // var j = 3; //just a function to show that clients can also process.
 // j = j + 3;
 // window.j = j;
-// var nowISO = moment().toISOString();
-// var now = moment();
+var nowISO = moment().toISOString();
+var now = moment();
 // document.write(now);
 //Should I delete entries every time or save them? If i delete them - i need to use visibleRange to restrict former weeks.
 var businessHours = {// days of week. an array of zero-based day of week integers (0=Sunday)
@@ -10,6 +10,18 @@ var businessHours = {// days of week. an array of zero-based day of week integer
     start: '10:00', // a start time (10am in this example)
     end: '12:00' // an end time (6pm in this example)
 };
+var selectValidation = function (selectInfo) {
+    //console.log(selectInfo);
+    var duration = moment.duration(selectInfo.end.diff(selectInfo.start));
+    var hours = duration.asHours();
+    console.log(hours);
+    if (hours < 3) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 $(document).ready(function () {
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
@@ -26,9 +38,10 @@ $(document).ready(function () {
         selectHelper: true,
         selectOverlap: false,
         selectConstraint: {
-            start: '10:00',                     //no duration function
-            end: '12:00'
+            start: nowISO,                     //no duration function
+            end: '23:00'
         },
+        selectAllow: selectValidation,
         // eventConstraint: {                  //no duration function yet
         //     businessHours
         // },
