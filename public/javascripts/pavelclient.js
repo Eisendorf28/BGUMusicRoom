@@ -17,7 +17,8 @@ var selectValidation = function (selectInfo) {
     var duration = moment.duration(selectInfo.end.diff(selectInfo.start));
     var hours = duration.asHours();
     console.log(hours);
-    return (hours < 3);
+    //  debugger;
+    return (hours < 3);                         //what if admin account?
 }
 $(document).ready(function () {
     // page is now ready, initialize the calendar...
@@ -36,7 +37,7 @@ $(document).ready(function () {
         selectOverlap: false,
         selectConstraint: {
             start: nowISO,                     //no duration function
-            end: laterISO
+            end: laterISO 
         },
         selectAllow: selectValidation,
         // eventConstraint: {                  //no duration function yet
