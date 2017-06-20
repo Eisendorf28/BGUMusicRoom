@@ -101,6 +101,5 @@ $(document).ready(function () {
                 }
             }
         },
-
     })
 });
