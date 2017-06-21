@@ -5,5 +5,5 @@ pg.defaults.ssl = true;
 const client = new pg.Client(connectionString);
 client.connect();
 const query = client.query(
-  'CREATE TABLE items(id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)');
+  'CREATE TABLE room_occupation(id SERIAL PRIMARY KEY, user_id int not null, start_timestamp date not null, end_timestamp date not null, phone_number varchar(10) not null, description varchar(255), is_colaberative boolean DEFAULT false )');
 query.on('end', () => { client.end(); });
