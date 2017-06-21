@@ -17,7 +17,10 @@ var laterISO = now.clone().add(3, 'days').toISOString();
 //     console.log(selectInfo);
 //     return selectInfo;
 // }
-var event = { id: 1, title: 'New event', start: nowISO, end: laterISO };
+var nowISO2 = moment().add(7, 'hours').toISOString();
+var laterISO2 = moment().add(10 , 'hours').toISOString();
+
+var event = { id: 1, title: 'New event', start: nowISO2, end: laterISO2 }
 
 $('#calendar').fullCalendar('renderEvent', event, true);                    //change
 var selectValidation = function (selectInfo) {

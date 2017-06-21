@@ -34,7 +34,19 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+var pg = require('pg');
+pg.defaults.ssl = true;
+var myDbUrl = "postgres://ouxkbqmnxtrhrx:23ef9a216cc43c9a3d6735fcaa267c4460df821812b787d8d5eff1b8f3d083b3@ec2-54-225-236-102.compute-1.amazonaws.com:5432/d9nfd64qpil3d2";
+pg.connect(myDbUrl, function(err, client) {
+  if (err) throw err;
+  console.log('Connected to postgres! Getting schemas...');
 
+  client
+    .query('SELECT table_schema,table_name FROM information_schema.tables;')
+    .on('row', function(row) {
+      console.log(JSON.stringify(row));
+    });
+});
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
