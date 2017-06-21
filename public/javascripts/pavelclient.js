@@ -18,11 +18,8 @@ var laterISO = now.clone().add(3, 'days').toISOString();
 //     return selectInfo;
 // }
 var nowISO2 = moment().add(7, 'hours').toISOString();
-var laterISO2 = moment().add(10 , 'hours').toISOString();
-
-var event = { id: 1, title: 'New event', start: nowISO2, end: laterISO2 }
-
-$('#calendar').fullCalendar('renderEvent', event, true);                    //change
+var laterISO2 = moment().add(10, 'hours').toISOString();
+//change
 var selectValidation = function (selectInfo) {
     //console.log(selectInfo.end.title);
     var duration = moment.duration(selectInfo.end.diff(selectInfo.start));
@@ -104,5 +101,7 @@ $(document).ready(function () {
                 }
             }
         },
-    })
+    });
+    var event = { id: 1, title: 'New event', start: nowISO2, end: laterISO2 };
+    $('#calendar').fullCalendar('renderEvent', event, true);
 });
