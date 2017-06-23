@@ -6,6 +6,7 @@ var nowISO = now.toISOString();
 var laterISO = now.clone().add(3, 'days').toISOString();
 //console.log(nowISO + " " + laterISO);
 
+
 //Should I delete entries every time or save them? If i delete them - i need to use visibleRange to restrict former weeks.
 // var businessHours = {// days of week. an array of zero-based day of week integers (0=Sunday)
 //     dow: [1, 2, 3, 4], // Monday - Thursday
@@ -28,7 +29,7 @@ var selectValidation = function (selectInfo) {
     //  debugger;
     return (hours < 3);                         //what if admin account?
 }
-
+var event = { id: 1, title: 'New event', start: nowISO2, end: laterISO2 };
 // var eventsObject = function addCalanderEvent(selectInfo) {
 //     var eventObject = {
 //         //title: title,
@@ -87,12 +88,46 @@ $(document).ready(function () {
                 buttonText: 'Week',
             }
         },
-        // dayClick: function (selectInfo) {
-        //     //console.log(selectInfo);
-        //     var eventObject = { title: "crap", start: selectInfo.start.format(), end: selectInfo.end.format() };
-        //     $('#calendar').fullCalendar('renderEvent', eventObject, true);
+//          dayClick: function (selectInfo) {
+//              $(function () {
+//     $('#select_link').click(function (e) {
+//         e.preventDefault();
+//         console.log('select_link clicked');
 
-        //     console.log('a day has been clicked!');
+//         /*$.ajax({
+//            dataType: 'jsonp',
+//            data: "data=yeah",						
+//            jsonp: 'callback',
+//            url: 'http://localhost:3000/endpoint?callback=?',						
+//            success: function(data) {
+//                console.log('success');
+//                console.log(JSON.stringify(data));
+//            }
+//        });*/
+//         var data = {};
+//         data.title = "title";
+//         data.message = "message";
+
+//         $.ajax({
+//             type: 'POST',
+//             data: JSON.stringify(data),
+//             contentType: 'application/json',
+//             url: 'http://localhost:3000/create',
+//             success: function (data) {
+//                 console.log('success');
+//                 console.log(JSON.stringify(data));
+//             }
+//         });
+//         /*$.ajax('http://localhost:3000/endpoint', {
+//                 type: 'POST',
+//                 data: JSON.stringify(data),
+//                 contentType: 'application/json',
+//                 success: function() { console.log('success');},
+//                 error  : function() { console.log('error');}
+//         });*/
+//     });
+// });
+//          },
         customButtons: {
             walla: {    //the name of my custom button
                 text: 'custom!',
@@ -102,6 +137,21 @@ $(document).ready(function () {
             }
         },
     });
-    var event = { id: 1, title: 'New event', start: nowISO2, end: laterISO2 };
     $('#calendar').fullCalendar('renderEvent', event, true);
+
 });
+console.log(event);
+$.ajax({    //rendering all events from database
+    type: 'GET',
+    url: '/API/room_occupation/all',
+    success: function (event) {
+        jQuery.each(event, function (eventindex) {
+            event[eventindex].title = event[eventindex].description;
+            event[eventindex].start = event[eventindex].start_timestamp;
+            console.log(event[eventindex]);
+            console.log(eventindex);
+            $('#calendar').fullCalendar('renderEvent', event[eventindex], true);
+        });
+    }
+});
+
