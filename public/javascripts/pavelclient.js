@@ -5,8 +5,6 @@ var now = moment().add(3, 'hours');
 var nowISO = now.toISOString();
 var laterISO = now.clone().add(3, 'days').toISOString();
 //console.log(nowISO + " " + laterISO);
-
-
 //Should I delete entries every time or save them? If i delete them - i need to use visibleRange to restrict former weeks.
 // var businessHours = {// days of week. an array of zero-based day of week integers (0=Sunday)
 //     dow: [1, 2, 3, 4], // Monday - Thursday
@@ -88,59 +86,180 @@ $(document).ready(function () {
                 buttonText: 'Week',
             }
         },
-//          dayClick: function (selectInfo) {
-//              $(function () {
-//     $('#select_link').click(function (e) {
-//         e.preventDefault();
-//         console.log('select_link clicked');
-
-//         /*$.ajax({
-//            dataType: 'jsonp',
-//            data: "data=yeah",						
-//            jsonp: 'callback',
-//            url: 'http://localhost:3000/endpoint?callback=?',						
-//            success: function(data) {
-//                console.log('success');
-//                console.log(JSON.stringify(data));
-//            }
-//        });*/
-//         var data = {};
-//         data.title = "title";
-//         data.message = "message";
-
-//         $.ajax({
-//             type: 'POST',
-//             data: JSON.stringify(data),
-//             contentType: 'application/json',
-//             url: 'http://localhost:3000/create',
-//             success: function (data) {
-//                 console.log('success');
-//                 console.log(JSON.stringify(data));
-//             }
-//         });
-//         /*$.ajax('http://localhost:3000/endpoint', {
-//                 type: 'POST',
-//                 data: JSON.stringify(data),
-//                 contentType: 'application/json',
-//                 success: function() { console.log('success');},
-//                 error  : function() { console.log('error');}
-//         });*/
-//     });
-// });
-//          },
-        customButtons: {
-            walla: {    //the name of my custom button
-                text: 'custom!',
-                click: function () {
-                    alert('clicked the custom button!');
+        eventClick: function (calEvent, jsEvent, view) {
+            $('#eventStart').datepicker("setDate", new Date(calEvent.start));
+            $('#eventEnd').datepicker("setDate", new Date(calEvent.end));
+            $('#eventContent #eventTitle').val(calEvent.title);
+            //                    alert(calEvent.className);
+            //                alert(calEvent.className=="gbcs-halfday-event"?"1":"2");
+            //                    $('#allday[value="' + calEvent.className=="gbcs-halfday-event"?"1":"2" + '"]').prop('checked', true);
+            $("#eventContent").dialog("option", "buttons", [
+                {
+                    text: "Edit",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                {
+                    text: "Delete",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
                 }
-            }
+            ]);
+            $("#eventContent").dialog("option", "title", "Edit Event");
+            $('#eventContent').dialog('open');
         },
-    });
-    $('#calendar').fullCalendar('renderEvent', event, true);
+        editable: true,
+        //eventClick: function (event, jsEvent, view) {
+        //set the values and open the modal
+        // $("#eventInfo").html(event);
+        // $("#eventLink").attr('href', event.url);
+        // $("#eventContent").dialog({ modal: true, title: event.title });
+        // dayClick: function (selectInfo) {
+        //     $("selectInfo").html(selectInfo);
+        //     $("#eventLink").attr('href', event.url);
+        //     $("#eventContent").dialog({ modal: true, title: event.title });
+        // },
+        select: function (start, end, allDay) {
+            $('#eventStart').datepicker("setDate", new Date(start));
+            $('#eventEnd').datepicker("setDate", new Date(end));
+            $('#calEventDialog').dialog('open');
+        },
+        //  $(function () {
+        //     $('#select_link').click(function (e) {
+        //         e.preventDefault();
+        //         console.log('select_link clicked');
 
+        //         /*$.ajax({
+        //            dataType: 'jsonp',
+        //            data: "data=yeah",						
+        //            jsonp: 'callback',
+        //            url: 'http://localhost:3000/endpoint?callback=?',						
+        //            success: function(data) {
+        //                console.log('success');
+        //                console.log(JSON.stringify(data));
+        //            }
+        //        });*/
+        //         var data = {};
+        //         data.title = "title";
+        //         data.message = "message";
+
+        //         $.ajax({
+        //             type: 'POST',
+        //             data: JSON.stringify(data),
+        //             contentType: 'application/json',
+        //             url: 'http://localhost:3000/create',
+        //             success: function (data) {
+        //                 console.log('success');
+        //                 console.log(JSON.stringify(data));
+        //             }
+        //         });
+        //         /*$.ajax('http://localhost:3000/endpoint', {
+        //                 type: 'POST',
+        //                 data: JSON.stringify(data),
+        //                 contentType: 'application/json',
+        //                 success: function() { console.log('success');},
+        //                 error  : function() { console.log('error');}
+        //         });*/
+        //     });
+        // });
+        //          },
+        // customButtons: {
+        //     walla: {    //the name of my custom button
+        //         text: 'custom!',
+        //         click: function () {
+        //             alert('clicked the custom button!');
+        //         }
+        //     }
+        // },
+
+    });
+    var title = $('#eventTitle');
+    var start = $('#eventStart');
+    var end = $('#eventEnd');
+    var eventClass, color;
+    $('#calEventDialog').dialog({                   //New event dialog
+        resizable: false,
+        autoOpen: false,
+        title: 'Add Event',
+        width: 400,
+        buttons: {
+            Save: function () {
+                if ($('input:radio[name=allday]:checked').val() == "1") {
+                    eventClass = "gbcs-halfday-event";
+                    color = "#9E6320";
+                    end.val(start.val());
+                }
+                else {
+                    eventClass = "gbcs-allday-event";
+                    color = "#875DA8";
+                }
+                if (title.val() !== '') {
+                    $myCalendar.fullCalendar('renderEvent', {
+                        title: title.val(),
+                        start: start.val(),
+                        end: end.val(),
+                        allDay: true,
+                        className: eventClass,
+                        color: color
+                    }, true // make the event "stick"
+                    );
+                }
+                $myCalendar.fullCalendar('unselect');
+                $(this).dialog('close');
+            },
+            Cancel: function () {
+                $(this).dialog('close');
+            }
+        }
+    });
+    //existing event dialog
+    $('#eventContent').dialog({
+        resizable: false,
+        autoOpen: false,
+        title: 'Existing Event',
+        width: 400,
+        buttons: {
+            Edit: function () {
+                if ($('input:radio[name=allday]:checked').val() == "1") {
+                    eventClass = "gbcs-halfday-event";
+                    color = "#9E6320";
+                    end.val(start.val());
+                }
+                else {
+                    eventClass = "gbcs-allday-event";
+                    color = "#875DA8";
+                }
+                if (title.val() !== '') {
+                    $myCalendar.fullCalendar('renderEvent', {
+                        title: title.val(),
+                        start: start.val(),
+                        end: end.val(),
+                        allDay: true,
+                        className: eventClass,
+                        color: color
+                    }, true // make the event "stick"
+                    );
+                }
+                $myCalendar.fullCalendar('unselect');
+                $(this).dialog('close');
+            },
+            Cancel: function () {
+                $(this).dialog('close');
+            }
+        }
+    });
+
+    $('#calendar').fullCalendar('renderEvent', event, true);
 });
-console.log(event);
+//console.log(event);
 $.ajax({    //rendering all events from database
     type: 'GET',
     url: '/API/room_occupation/all',

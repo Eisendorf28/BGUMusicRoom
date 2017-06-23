@@ -1,14 +1,49 @@
 <center> BGU Music Room Scheduler </center>
-<div id="eventContent" title="Event Details">
+<script language="javaScript">
+    function showMe(box) {
+        var chboxs = document.getElementsByName("collaborative");
+        var vis = "none";
+        var selected = document.getSelection;
+        if (chboxs[0].checked) {
+            vis = "block";
+        }
+        document.getElementById(box).style.display = vis;
+    }
+
+</script>
+<div id="calEventDialog">
+    <form>
+        <fieldset>
+            <label for="eventTitle">Phone Number:</label>
+            <input type="text" name="eventTitle" id="eventTitle" /><br>
+            <label for="eventStart">Chosen Time:</label>
+            <input type="text" name="eventStart" id="eventStart" disabled/><br>
+            <input type="checkbox" name="collaborative" onclick="showMe('div2')"> Let people know I'm down for a jam</br>
+            <div id="div2" style="display:none">
+                Description:  <input type="text" name="collaborative_description"/><br>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div id="eventContent" title="Event Details" display:none>
     <div id="eventInfo"></div>
     <p><strong><a id="eventLink" target="_blank">Read More</a></strong></p>
 </div>
+
+<div style="border:solid 2px red;">
+    <div id='myCalendar'></div>
+</div>
 <!-- loading all relevant css and js -->
 <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css' />
-<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css' media="print"/>
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css' media="print" />
 <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/gcal.js'></script>
 
 <!-- Calling the client -->
