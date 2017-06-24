@@ -196,7 +196,7 @@ $(document).ready(function () {
                     type: 'POST',
                     url: '/API/room_occupation/create',
                     data: {
-                        uder_id: "5",
+                        user_id: "5",
                         start_timestamp: "1498319190",
                         end_timestamp: "1498322790",
                         phone_number: "0502222222",
@@ -218,7 +218,7 @@ $(document).ready(function () {
                 //     }, true // make the event "stick"
                 //     );
                 // }
-                $myCalendar.fullCalendar('unselect');
+                //$myCalendar.fullCalendar('unselect');
                 $(this).dialog('close');
             },
             Cancel: function () {
