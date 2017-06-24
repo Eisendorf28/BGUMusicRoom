@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 router.get('/pavel', function (req, res) {
   res.sendFile(path.join(__dirname + '/../views/pavel.html'));
 });
-router.post('/API/room_occupation/create', function (req, res) {           //endpoint #1 - create (should be post)
+router.post('/API/room_occupation/create', function (req, res) {           //endpoint #1 - create
   const pg = require('pg');
   var myDbUrl = "postgres://ouxkbqmnxtrhrx:23ef9a216cc43c9a3d6735fcaa267c4460df821812b787d8d5eff1b8f3d083b3@ec2-54-225-236-102.compute-1.amazonaws.com:5432/d9nfd64qpil3d2";
   const connectionString = myDbUrl;
@@ -25,9 +25,11 @@ router.post('/API/room_occupation/create', function (req, res) {           //end
     function (err, result) {
       if (err) {
         console.log(err);
+        console.log("ER: " + moment.unix(req.body.start_timestamp));
         res.json(err);
       }
       else {
+        console.log("SR: " + moment.unix(req.body.start_timestamp));
         res.json(result.rows);
       }
     }

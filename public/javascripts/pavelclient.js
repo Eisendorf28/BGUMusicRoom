@@ -4,6 +4,8 @@
 var now = moment().add(3, 'hours');
 var nowISO = now.toISOString();
 var laterISO = now.clone().add(3, 'days').toISOString();
+var selection = [null, null];
+console.log(selection[0] + selection[1]);
 //console.log(nowISO + " " + laterISO);
 //Should I delete entries every time or save them? If i delete them - i need to use visibleRange to restrict former weeks.
 // var businessHours = {// days of week. an array of zero-based day of week integers (0=Sunday)
@@ -27,7 +29,7 @@ var selectValidation = function (selectInfo) {
     //  debugger;
     return (hours < 3);                         //what if admin account?
 }
-var event = { id: 1, title: 'New event', start: nowISO2, end: laterISO2 };
+//var event = { id: 1, title: 'New event', start: nowISO2, end: laterISO2 };
 // var eventsObject = function addCalanderEvent(selectInfo) {
 //     var eventObject = {
 //         //title: title,
@@ -131,80 +133,43 @@ $(document).ready(function () {
             $('#eventStart').datepicker("setDate", new Date(start));
             $('#eventEnd').datepicker("setDate", new Date(end));
             $('#calEventDialog').dialog('open');
+            selection[0] = moment(start).format();                  
+            selection[1] = moment(end).format();
+            console.log("Event Start date: " + selection[0],
+                "\nEvent End date: " + selection[1]);
         },
-        //  $(function () {
-        //     $('#select_link').click(function (e) {
-        //         e.preventDefault();
-        //         console.log('select_link clicked');
-
-        //         /*$.ajax({
-        //            dataType: 'jsonp',
-        //            data: "data=yeah",						
-        //            jsonp: 'callback',
-        //            url: 'http://localhost:3000/endpoint?callback=?',						
-        //            success: function(data) {
-        //                console.log('success');
-        //                console.log(JSON.stringify(data));
-        //            }
-        //        });*/
-        //         var data = {};
-        //         data.title = "title";
-        //         data.message = "message";
-
-        //         $.ajax({
-        //             type: 'POST',
-        //             data: JSON.stringify(data),
-        //             contentType: 'application/json',
-        //             url: 'http://localhost:3000/create',
-        //             success: function (data) {
-        //                 console.log('success');
-        //                 console.log(JSON.stringify(data));
-        //             }
-        //         });
-        //         /*$.ajax('http://localhost:3000/endpoint', {
-        //                 type: 'POST',
-        //                 data: JSON.stringify(data),
-        //                 contentType: 'application/json',
-        //                 success: function() { console.log('success');},
-        //                 error  : function() { console.log('error');}
-        //         });*/
-        //     });
-        // });
-        //          },
-        // customButtons: {
-        //     walla: {    //the name of my custom button
-        //         text: 'custom!',
-        //         click: function () {
-        //             alert('clicked the custom button!');
-        //         }
-        //     }
-        // },
-
     });
     var title = $('#eventTitle');
     var start = $('#eventStart');
     var end = $('#eventEnd');
     var eventClass, color;
+    //var phone_number = getElementById("phone_number");
+    //document.getElementById("mytext").value = phone_number;
     $('#calEventDialog').dialog({                   //New event dialog
         resizable: false,
         autoOpen: false,
         title: 'Add Event',
         width: 400,
         buttons: {
+
             Save: function () {
                 $.ajax({    //sending info to server
                     type: 'POST',
                     url: '/API/room_occupation/create',
                     data: {
                         user_id: "5",
-                        start_timestamp: "1498319190",
-                        end_timestamp: "1498322790",
-                        phone_number: "0502222222",
-                        is_collabortive: "true",
-                        description: "looking for a drummer and a friend"
+                        start_timestamp: moment(selection[0]).unix(),
+                        end_timestamp: moment(selection[1]).unix(),
+                        phone_number: $('#phone_number').val(),
+                        is_collabortive: $('#collaborative').val(),
+                        description: $('#collaborative_description').val()
                     },
-                    success: function (event) {
-                        console.log("SUCCESS!");
+                    success: function () {
+                        console.log(moment(selection[0]).unix());
+                        console.log(selection[1]);
+                        //console.log(start_selection);
+
+                        //$('#calendar').fullCalendar('renderEvent', event, true);  have to render it immidiately 
                     }
                 });
                 // if (title.val() !== '') {
@@ -263,7 +228,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#calendar').fullCalendar('renderEvent', event, true);
+//    $('#calendar').fullCalendar('renderEvent', event, true);
 });
 //console.log(event);
 $.ajax({    //rendering all events from database
