@@ -20,7 +20,7 @@
             <input type="text" name="eventStart" id="eventStart" disabled/><br>
             <input type="checkbox" name="collaborative" onclick="showMe('div2')"> Let people know I'm down for a jam</br>
             <div id="div2" style="display:none">
-                Description:  <input type="text" name="collaborative_description"/><br>
+                Description: <input type="text" name="collaborative_description" /><br>
             </div>
         </fieldset>
     </form>
@@ -30,7 +30,19 @@
     <div id="eventInfo"></div>
     <p><strong><a id="eventLink" target="_blank">Read More</a></strong></p>
 </div>
+<!-- AJAX REQUEST 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+AJAX
 
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        $.ajax({url: "/API/room_occupation/create", async: true, success: showMe('div2')});
+    });
+});
+</script>
+<button>Change Content</button>
+-->
 <div style="border:solid 2px red;">
     <div id='myCalendar'></div>
 </div>

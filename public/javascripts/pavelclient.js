@@ -192,26 +192,32 @@ $(document).ready(function () {
         width: 400,
         buttons: {
             Save: function () {
-                if ($('input:radio[name=allday]:checked').val() == "1") {
-                    eventClass = "gbcs-halfday-event";
-                    color = "#9E6320";
-                    end.val(start.val());
-                }
-                else {
-                    eventClass = "gbcs-allday-event";
-                    color = "#875DA8";
-                }
-                if (title.val() !== '') {
-                    $myCalendar.fullCalendar('renderEvent', {
-                        title: title.val(),
-                        start: start.val(),
-                        end: end.val(),
-                        allDay: true,
-                        className: eventClass,
-                        color: color
-                    }, true // make the event "stick"
-                    );
-                }
+                $.ajax({    //sending info to server
+                    type: 'POST',
+                    url: '/API/room_occupation/create',
+                    data: {
+                        uder_id: "5",
+                        start_timestamp: "1498319190",
+                        end_timestamp: "1498322790",
+                        phone_number: "0502222222",
+                        is_collabortive: "true",
+                        description: "looking for a drummer and a friend"
+                    },
+                    success: function (event) {
+                        console.log("SUCCESS!");
+                    }
+                });
+                // if (title.val() !== '') {
+                //     $myCalendar.fullCalendar('renderEvent', {
+                //         title: title.val(),
+                //         start: start.val(),
+                //         end: end.val(),
+                //         allDay: true,
+                //         className: eventClass,
+                //         color: color
+                //     }, true // make the event "stick"
+                //     );
+                // }
                 $myCalendar.fullCalendar('unselect');
                 $(this).dialog('close');
             },
@@ -273,4 +279,5 @@ $.ajax({    //rendering all events from database
         });
     }
 });
+
 
