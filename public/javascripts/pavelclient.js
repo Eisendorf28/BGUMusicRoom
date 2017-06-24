@@ -133,7 +133,7 @@ $(document).ready(function () {
             $('#eventStart').datepicker("setDate", new Date(start));
             $('#eventEnd').datepicker("setDate", new Date(end));
             $('#calEventDialog').dialog('open');
-            selection[0] = moment(start).format();                  
+            selection[0] = moment(start).format();
             selection[1] = moment(end).format();
             console.log("Event Start date: " + selection[0],
                 "\nEvent End date: " + selection[1]);
@@ -167,6 +167,11 @@ $(document).ready(function () {
                     success: function () {
                         console.log(moment(selection[0]).unix());
                         console.log(selection[1]);
+                        //$('#calendar').fullCalendar('rerenderEvents');
+                        //$('#calendar').fullCalendar('rerenderEvents');
+                        //$('#calendar').fullCalendar('destroy');
+                        //$('#calendar').fullCalendar('render');
+                        destroyAndRender();
                         //console.log(start_selection);
 
                         //$('#calendar').fullCalendar('renderEvent', event, true);  have to render it immidiately 
@@ -228,21 +233,39 @@ $(document).ready(function () {
         }
     });
 
-//    $('#calendar').fullCalendar('renderEvent', event, true);
+    //    $('#calendar').fullCalendar('renderEvent', event, true);
 });
 //console.log(event);
-$.ajax({    //rendering all events from database
-    type: 'GET',
-    url: '/API/room_occupation/all',
-    success: function (event) {
-        jQuery.each(event, function (eventindex) {
-            event[eventindex].title = event[eventindex].description;
-            event[eventindex].start = event[eventindex].start_timestamp;
-            console.log(event[eventindex]);
-            console.log(eventindex);
-            $('#calendar').fullCalendar('renderEvent', event[eventindex], true);
-        });
-    }
-});
-
+function destroyAndRender() {
+    $('#calendar').fullCalendar('removeEvents');
+    $.ajax({    //rendering all events from database
+        type: 'GET',
+        url: '/API/room_occupation/all',
+        success: function (event) {
+            jQuery.each(event, function (eventindex) {
+                event[eventindex].title = event[eventindex].description;
+                event[eventindex].start = event[eventindex].start_timestamp;
+                console.log(event[eventindex]);
+                console.log(eventindex);
+                $('#calendar').fullCalendar('renderEvent', event[eventindex], true);
+            });
+        }
+    });
+};
+render();
+function render() {
+    $.ajax({    //rendering all events from database
+        type: 'GET',
+        url: '/API/room_occupation/all',
+        success: function (event) {
+            jQuery.each(event, function (eventindex) {
+                event[eventindex].title = event[eventindex].description;
+                event[eventindex].start = event[eventindex].start_timestamp;
+                console.log(event[eventindex]);
+                console.log(eventindex);
+                $('#calendar').fullCalendar('renderEvent', event[eventindex], true);
+            });
+        }
+    });
+};
 
