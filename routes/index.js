@@ -5,10 +5,20 @@ var moment = require('moment');
 /* GET home page. */
 router.get('/', function (req, res, next) {
   console.log(req);
-  res.render('index', { title: 'Express', Pavel: "Pavel" });
+  res.render('index', { title: 'Express', Pavel: "Pavel", success: false, errors:req.session.errors });
+  req.session.errors = null;
 });
 router.get('/pavel', function (req, res) {
   res.sendFile(path.join(__dirname + '/../views/pavel.html'));
+});
+router.post('/submit', function(req, res, next){                            //endpoint #0 - check validity
+  req.check('phone_number', 'Invalid phone number').isMobilePhone();
+  //req.check('eventStart', 'Invalid email adress').isEmail();
+  var errors = req.validationErrors();
+  if(errors){
+    req.session.errors = errors;
+    res.redirect('/');
+  }
 });
 router.post('/API/room_occupation/create', function (req, res) {           //endpoint #1 - create
   const pg = require('pg');

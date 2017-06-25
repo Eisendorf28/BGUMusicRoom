@@ -26,12 +26,17 @@
 </script>
 <div id="calEventDialog">
     <!-- new event -->
-    <form>
+    <form action="/submit" method="post">
         <!--  <fieldset> -->
+        <script language="javaScript">
+            var id=5;  
+            </script>
         <label for="phone_number">Phone Number:</label>
         <input type="text" name="phone_number" id="phone_number" /><br>
-        <label for="eventStart">Chosen Time:</label>
+        <label for="eventStart">Start Time:</label>
         <input type="text" name="eventStart" id="eventStart" disabled/><br>
+        <label for="eventEnd">End Time:</label>
+        <input type="text" name="eventEnd" id="eventEnd" disabled/><br>
         <input type="checkbox" name="collaborative" onclick="showMe('div2')"> Let people know I'm down for a jam</br>
         <div id="div2" style="display:none">
             Description: <input type="text" name="collaborative_description" /><br>
