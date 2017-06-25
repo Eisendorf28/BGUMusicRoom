@@ -92,19 +92,24 @@ $(document).ready(function () {
             $('#eventStart').datepicker("setDate", new Date(calEvent.start));
             $('#eventEnd').datepicker("setDate", new Date(calEvent.end));
             $('#eventContent #eventTitle').val(calEvent.title);
-            //                    alert(calEvent.className);
-            //                alert(calEvent.className=="gbcs-halfday-event"?"1":"2");
-            //                    $('#allday[value="' + calEvent.className=="gbcs-halfday-event"?"1":"2" + '"]').prop('checked', true);
+            var id = calEvent.id;
+            console.log(id);
             $("#eventContent").dialog("option", "buttons", [
-                {
-                    text: "Edit",
-                    click: function () {
-                        $(this).dialog("close");
-                    }
-                },
                 {
                     text: "Delete",
                     click: function () {
+                        $.ajax({                                                           //sending deletion request to server
+                            type: 'DELETE',
+                            url: '/API/room_occupation/delete/' + encodeURIComponent(id), //remember that nifty trick
+                            success: function () {
+                                console.log(id);
+                                destroyAndRender();
+                            },
+                            error: function(){
+                                console.log(id + "error");
+                                destroyAndRender();
+                            }
+                        });
                         $(this).dialog("close");
                     }
                 },
