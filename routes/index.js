@@ -20,16 +20,19 @@ router.post('/API/room_occupation/create', function (req, res) {           //end
   console.log(req.body);
   console.log(moment.unix(req.body.start_timestamp));
   console.log(moment.unix(req.body.end_timestamp));
+  
   const query = client.query('INSERT into room_occupation (user_id, start_timestamp, end_timestamp, phone_number, description, is_colaberative) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
     [req.body.user_id, moment.unix(req.body.start_timestamp), moment.unix(req.body.end_timestamp), req.body.phone_number, req.body.description, req.body.is_colaberative],
     function (err, result) {
       if (err) {
         console.log(err);
         console.log("ER: " + moment.unix(req.body.start_timestamp));
+        console.log("ER without moment: " + req.body.start_timestamp);
         res.json(err);
       }
       else {
         console.log("SR: " + moment.unix(req.body.start_timestamp));
+        console.log("SR without moment: " + req.body.start_timestamp);
         res.json(result.rows);
       }
     }

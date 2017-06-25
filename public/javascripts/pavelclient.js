@@ -63,7 +63,7 @@ $(document).ready(function () {
                                 console.log(id);
                                 destroyAndRender();
                             },
-                            error: function(){
+                            error: function () {
                                 console.log(id + "error");
                                 destroyAndRender();
                             }
@@ -135,6 +135,7 @@ $(document).ready(function () {
                         //$('#calendar').fullCalendar('destroy');
                         //$('#calendar').fullCalendar('render');
                         destroyAndRender();
+                        //validate();
                         //console.log(start_selection);
 
                         //$('#calendar').fullCalendar('renderEvent', event, true);  have to render it immidiately 
@@ -215,17 +216,30 @@ function destroyAndRender() {
         }
     });
 };
+// function validate() {
+//     $('#phone_number').on('input', function () {
+//         var input = $(this);
+//         var is_name = input.val();
+//         if (is_name) { input.removeClass("invalid").addClass("valid"); }
+//         else { input.removeClass("valid").addClass("invalid"); }
+//     });
+// };
 render();
 function render() {             //rendering all events from database
-    $.ajax({    
+    $.ajax({
         type: 'GET',
         url: '/API/room_occupation/all',
         success: function (event) {
             jQuery.each(event, function (eventindex) {
                 event[eventindex].title = event[eventindex].description;
                 event[eventindex].start = event[eventindex].start_timestamp;
-                console.log(event[eventindex]);
-                console.log(eventindex);
+                //event[eventindex].end = event[eventindex].end_timestamp;
+                var unixTime = moment(event[eventindex]).unix();
+                var regularTime = moment(event[eventindex]);
+                console.log("Event number: " + eventindex);
+                console.log("Moment of event converted to unix: " + unixTime);
+                console.log("Moment object: " + regularTime);
+                //console.log(eventindex);
                 $('#calendar').fullCalendar('renderEvent', event[eventindex], true);
             });
         }
