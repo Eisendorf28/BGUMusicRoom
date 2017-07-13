@@ -16,11 +16,11 @@ $(document).ready(function () {
         slotDuration: '01:00:00',
         allDaySlot: false,                      //shit
         slotLabelFormat: 'HH:mm',
-        slotEventOverlap: false,               //what if drums/piano are taken away?   irrelevant nw
+        slotEventOverlap: false,               //what if drums/piano are taken away?   irrelevant atm
         nowIndicator: true,
         displayEventTime: true,                //on events
         displayEventEnd: true,                 //same
-        //dayPopoverFormat,                    //change later
+        //dayPopoverFormat,                    //change later. check docs
         selectable: true,
         selectHelper: true,
         selectOverlap: false,
@@ -36,14 +36,12 @@ $(document).ready(function () {
         header: {
             center: 'agendaWeek',               //, more views 
             left: 'title',                      //the date title
-            right: 'walla today prev,next'      //today, prev and next 
+            right: 'today prev,next'      //today, prev and next 
         },
         // buttons for switching between views no need
         views: {
             agendaWeek: {
                 type: 'agenda',
-                //duration: { minutes: '01:00:00' },
-                buttonText: 'Week',
             }
         },
         eventClick: function (calEvent, jsEvent, view) {
@@ -51,7 +49,13 @@ $(document).ready(function () {
             $('#eventEnd').datepicker("setDate", new Date(calEvent.end));
             $('#eventContent #eventTitle').val(calEvent.title);
             var id = calEvent.id;
+
             console.log(id);
+            console.log("ALL RELEVANT DATA OF THE EVENT: ");
+            console.log('Event: ' + calEvent.id);
+            console.log('Event: ' + calEvent.end_timestamp);
+            console.log('Event: ' + calEvent.description);
+
             $("#eventContent").dialog("option", "buttons", [
                 {
                     text: "Delete",
@@ -81,17 +85,15 @@ $(document).ready(function () {
             $("#eventContent").dialog("option", "title", "Edit Event");
             $('#eventContent').dialog('open');
         },
-        editable: true,
-        //eventClick: function (event, jsEvent, view) {
-        //set the values and open the modal
-        // $("#eventInfo").html(event);
-        // $("#eventLink").attr('href', event.url);
-        // $("#eventContent").dialog({ modal: true, title: event.title });
-        // dayClick: function (selectInfo) {
-        //     $("selectInfo").html(selectInfo);
-        //     $("#eventLink").attr('href', event.url);
-        //     $("#eventContent").dialog({ modal: true, title: event.title });
-        // },
+        eventRender: function (event, element) {
+            //console.log(event.description);
+            if (event.description == "" || event.description == null) {
+                element.css('background-color', '#F0694D');
+            }
+        },
+        editable: false,
+        eventStartEditable: false,
+        eventDurationEditable: false,
         select: function (start, end, allDay) {
             $('#eventStart').datepicker("setDate", new Date(start));
             $('#eventEnd').datepicker("setDate", new Date(end));
@@ -130,28 +132,10 @@ $(document).ready(function () {
                     success: function () {
                         console.log(moment(selection[0]).unix());
                         console.log(selection[1]);
-                        //$('#calendar').fullCalendar('rerenderEvents');
-                        //$('#calendar').fullCalendar('rerenderEvents');
-                        //$('#calendar').fullCalendar('destroy');
-                        //$('#calendar').fullCalendar('render');
                         destroyAndRender();
-                        //validate();
-                        //console.log(start_selection);
-
-                        //$('#calendar').fullCalendar('renderEvent', event, true);  have to render it immidiately 
                     }
                 });
-                // if (title.val() !== '') {
-                //     $myCalendar.fullCalendar('renderEvent', {
-                //         title: title.val(),
-                //         start: start.val(),
-                //         end: end.val(),
-                //         allDay: true,
-                //         className: eventClass,
-                //         color: color
-                //     }, true // make the event "stick"
-                //     );
-                // }
+
                 //$myCalendar.fullCalendar('unselect');
                 $(this).dialog('close');
             },
@@ -199,22 +183,9 @@ $(document).ready(function () {
 
     //    $('#calendar').fullCalendar('renderEvent', event, true);
 });
-//console.log(event);
 function destroyAndRender() {
     $('#calendar').fullCalendar('removeEvents');
-    $.ajax({    //rendering all events from database
-        type: 'GET',
-        url: '/API/room_occupation/all',
-        success: function (event) {
-            jQuery.each(event, function (eventindex) {
-                event[eventindex].title = event[eventindex].description;
-                event[eventindex].start = event[eventindex].start_timestamp;
-                console.log(event[eventindex]);
-                console.log(eventindex);
-                $('#calendar').fullCalendar('renderEvent', event[eventindex], true);
-            });
-        }
-    });
+    render();
 };
 // function validate() {
 //     $('#phone_number').on('input', function () {
@@ -236,11 +207,16 @@ function render() {             //rendering all events from database
                 //event[eventindex].end = event[eventindex].end_timestamp;
                 var unixTime = moment(event[eventindex]).unix();
                 var regularTime = moment(event[eventindex]);
-                console.log("Event number: " + eventindex);
-                console.log("Moment of event converted to unix: " + unixTime);
-                console.log("Moment object: " + regularTime);
+                console.log(event[eventindex].start_timestamp);
+                // console.log("Moment of event converted to unix: " + unixTime);
+                // console.log("Moment object: " + regularTime);
                 //console.log(eventindex);
+                //alert(event[eventindex].description);
+                // if (event[eventindex].description == "") {
+                //     event[eventindex].css('background-color', '#000');
+                // }
                 $('#calendar').fullCalendar('renderEvent', event[eventindex], true);
+
             });
         }
     });
